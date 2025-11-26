@@ -4,14 +4,14 @@ st.set_page_config(page_title="Secure Name Search", layout="centered")
 import pandas as pd
 import streamlit_authenticator as stauth
 
-# ----- USER CREDENTIALS -----
+# ---------------- USER DATA ----------------
 usernames = ["user1", "user2", "user3", "user4"]
 names = ["User One", "User Two", "User Three", "User Four"]
 
-# CORRECT hashing for YOUR version (v0.2.x)
+# HASH PASSWORDS (v0.2.x style)
 hashed_passwords = stauth.Hasher(["test123"] * 4).generate()
 
-# OLD-API AUTHENTICATOR (v0.2.x)
+# AUTHENTICATOR (v0.2.x)
 authenticator = stauth.Authenticate(
     names,
     usernames,
@@ -21,7 +21,7 @@ authenticator = stauth.Authenticate(
     cookie_expiry_days=1
 )
 
-# LOGIN
+# ---------------- LOGIN ----------------
 name, auth_status, username = authenticator.login("Login", "main")
 
 if auth_status is False:
@@ -29,13 +29,14 @@ if auth_status is False:
 elif auth_status is None:
     st.warning("Please enter your username and password")
 
-# AFTER LOGIN
+# ---------------- APP CONTENT ----------------
 if auth_status:
     authenticator.logout("Logout", "sidebar")
     st.sidebar.write(f"Logged in as: {name}")
 
     st.title("🔍 Secure Name Search App")
 
+    # Load Excel data
     df = pd.read_excel("sample_data.xlsx")
 
     search_name = st.text_input("Enter name to search:")
