@@ -1,3 +1,4 @@
+# app.py
 import streamlit as st
 import pandas as pd
 import streamlit_authenticator as stauth
@@ -8,10 +9,10 @@ st.set_page_config(page_title="Secure Name Search", layout="centered")
 # ---------------- CREDENTIALS ----------------
 usernames = ["user1", "user2", "user3", "user4"]
 names = ["User One", "User Two", "User Three", "User Four"]
-passwords = ["test123"] * 4  # plain passwords
+passwords = ["test123"] * 4  # plain passwords for demonstration
 
 # ---------------- HASH PASSWORDS ----------------
-hashed_passwords = stauth.Hasher(passwords).hash()  # modern API uses .hash()
+hashed_passwords = stauth.Hasher(passwords).hash()
 
 credentials = {
     "usernames": {
@@ -43,7 +44,8 @@ if auth_status:
 
     st.title("🔍 Secure Name Search App")
 
-    df = pd.read_excel("sample_data.xlsx")  # Make sure this file exists
+    # Make sure your Excel file exists in the repo
+    df = pd.read_excel("sample_data.xlsx")  
 
     search_name = st.text_input("Enter name to search:")
 
@@ -53,4 +55,4 @@ if auth_status:
             st.error("No matching records found.")
         else:
             st.success("Record found:")
-            st.write(results[["A", "B", "C"]])
+            st.dataframe(results[["A", "B", "C"]])  # nicely formatted table
