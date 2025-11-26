@@ -18,8 +18,8 @@ credentials = {
 authenticator = stauth.Authenticate(credentials, "demo_cookie", "demo_key")
 
 # ---------------- LOGIN ----------------
-# Use 'unrendered' for very old versions
-name, auth_status, username = authenticator.login("Login", "unrendered")
+# VERY OLD v0.2.x: no location argument supported
+name, auth_status, username = authenticator.login("Login")
 
 if auth_status is False:
     st.error("Incorrect username or password")
@@ -28,12 +28,12 @@ elif auth_status is None:
 
 # ---------------- APP CONTENT ----------------
 if auth_status:
-    authenticator.logout("Logout", "unrendered")
+    authenticator.logout("Logout")  # no location
     st.sidebar.write(f"Logged in as: {name}")
 
     st.title("🔍 Secure Name Search App")
 
-    df = pd.read_excel("sample_data.xlsx")  # Make sure this file exists
+    df = pd.read_excel("sample_data.xlsx")  # ensure this file exists
 
     search_name = st.text_input("Enter name to search:")
 
