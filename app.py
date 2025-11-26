@@ -12,7 +12,7 @@ st.title("🔍 Secure Name Search App")
 
     # Make sure your Excel file exists in the repo
 df = pd.read_excel("sample_data.xlsx")  
-    search_name = st.text_input("Enter name to search:")
+search_name = st.text_input("Enter name to search:")
 
     if st.button("Search"):
         results = df[df["A"].astype(str).str.contains(search_name, case=False, na=False)]
