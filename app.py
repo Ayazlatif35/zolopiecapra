@@ -8,17 +8,16 @@ import streamlit_authenticator as stauth
 usernames = ["user1", "user2", "user3", "user4"]
 names = ["User One", "User Two", "User Three", "User Four"]
 
-# PASSWORDS — plain text for this version
+# PASSWORDS — plain text for this very old version
 passwords = ["test123"] * 4
 
-# AUTHENTICATOR
+# AUTHENTICATOR — old constructor
 authenticator = stauth.Authenticate(
     names,
     usernames,
-    passwords,          # <-- plain text
+    passwords,
     "demo_cookie",
-    "demo_key",
-    cookie_expiry_days=1
+    "demo_key"
 )
 
 # ---------------- LOGIN ----------------
