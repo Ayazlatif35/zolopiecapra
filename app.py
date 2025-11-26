@@ -1,5 +1,4 @@
-import streamlit_authenticator as stauth
-st.write("Version:", stauth.__version__)
+streamlit run check_version.py
 
 import streamlit as st
 st.set_page_config(page_title="Secure Name Search", layout="centered")
