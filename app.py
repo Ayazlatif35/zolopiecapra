@@ -8,10 +8,11 @@ import streamlit_authenticator as stauth
 usernames = ["user1", "user2", "user3", "user4"]
 names = ["User One", "User Two", "User Three", "User Four"]
 
-# HASH PASSWORDS (v0.2.x style)
-hashed_passwords = stauth.Hasher(["test123"] * 4).generate()
+# HASH PASSWORDS (correct for your version)
+hasher = stauth.Hasher()
+hashed_passwords = hasher.generate(["test123"] * 4)
 
-# AUTHENTICATOR (v0.2.x)
+# AUTHENTICATOR
 authenticator = stauth.Authenticate(
     names,
     usernames,
