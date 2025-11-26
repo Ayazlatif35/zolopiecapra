@@ -18,7 +18,7 @@ credentials = {
 authenticator = stauth.Authenticate(credentials, "demo_cookie", "demo_key")
 
 # ---------------- LOGIN ----------------
-name, auth_status, username = authenticator.login("Login", "main")
+name, auth_status, username = authenticator.login("Login", "sidebar")  # <-- fixed
 
 if auth_status is False:
     st.error("Incorrect username or password")
