@@ -2,24 +2,34 @@ import streamlit as st
 import pandas as pd
 import streamlit_authenticator as stauth
 
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(page_title="Secure Name Search", layout="centered")
 
 # ---------------- CREDENTIALS ----------------
+usernames = ["user1", "user2", "user3", "user4"]
+names = ["User One", "User Two", "User Three", "User Four"]
+passwords = ["test123"] * 4  # plain passwords
+
+# ---------------- HASH PASSWORDS ----------------
+hashed_passwords = stauth.Hasher(passwords).hash()  # modern API uses .hash()
+
 credentials = {
     "usernames": {
-        "user1": {"name": "User One", "password": "test123"},
-        "user2": {"name": "User Two", "password": "test123"},
-        "user3": {"name": "User Three", "password": "test123"},
-        "user4": {"name": "User Four", "password": "test123"},
+        uname: {"name": name, "password": pwd}
+        for uname, name, pwd in zip(usernames, names, hashed_passwords)
     }
 }
 
 # ---------------- AUTHENTICATOR ----------------
-authenticator = stauth.Authenticate(credentials, "demo_cookie", "demo_key")
+authenticator = stauth.Authenticate(
+    credentials,
+    cookie_name="demo_cookie",
+    key="demo_key",
+    cookie_expiry_days=1
+)
 
 # ---------------- LOGIN ----------------
-# VERY OLD v0.2.x: no location argument supported
-name, auth_status, username = authenticator.login("Login")
+name, auth_status, username = authenticator.login("Login", "main")
 
 if auth_status is False:
     st.error("Incorrect username or password")
@@ -28,12 +38,12 @@ elif auth_status is None:
 
 # ---------------- APP CONTENT ----------------
 if auth_status:
-    authenticator.logout("Logout")  # no location
+    authenticator.logout("Logout", "sidebar")
     st.sidebar.write(f"Logged in as: {name}")
 
     st.title("🔍 Secure Name Search App")
 
-    df = pd.read_excel("sample_data.xlsx")  # ensure this file exists
+    df = pd.read_excel("sample_data.xlsx")  # Make sure this file exists
 
     search_name = st.text_input("Enter name to search:")
 
