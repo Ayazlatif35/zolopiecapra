@@ -1,24 +1,21 @@
 import streamlit as st
-st.set_page_config(page_title="Secure Name Search", layout="centered")
-
 import pandas as pd
 import streamlit_authenticator as stauth
 
-# ---------------- USER DATA ----------------
-usernames = ["user1", "user2", "user3", "user4"]
-names = ["User One", "User Two", "User Three", "User Four"]
+st.set_page_config(page_title="Secure Name Search", layout="centered")
 
-# PASSWORDS — plain text for this very old version
-passwords = ["test123"] * 4
+# ---------------- CREDENTIALS ----------------
+credentials = {
+    "usernames": {
+        "user1": {"name": "User One", "password": "test123"},
+        "user2": {"name": "User Two", "password": "test123"},
+        "user3": {"name": "User Three", "password": "test123"},
+        "user4": {"name": "User Four", "password": "test123"},
+    }
+}
 
-# AUTHENTICATOR — old constructor
-authenticator = stauth.Authenticate(
-    names,
-    usernames,
-    passwords,
-    "demo_cookie",
-    "demo_key"
-)
+# ---------------- AUTHENTICATOR ----------------
+authenticator = stauth.Authenticate(credentials, "demo_cookie", "demo_key")
 
 # ---------------- LOGIN ----------------
 name, auth_status, username = authenticator.login("Login", "main")
@@ -35,7 +32,6 @@ if auth_status:
 
     st.title("🔍 Secure Name Search App")
 
-    # Load Excel data
     df = pd.read_excel("sample_data.xlsx")
 
     search_name = st.text_input("Enter name to search:")
