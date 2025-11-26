@@ -8,7 +8,7 @@ st.set_page_config(page_title="Secure Name Search", layout="centered")
 
 
 
-    st.title("🔍 Secure Name Search App")
+st.title("🔍 Secure Name Search App")
 
     # Make sure your Excel file exists in the repo
     df = pd.read_excel("sample_data.xlsx")  
