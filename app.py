@@ -1,22 +1,37 @@
 import streamlit as st
+st.set_page_config(page_title="Secure Name Search", layout="centered")
+
 import pandas as pd
 import streamlit_authenticator as stauth
 
-st.set_page_config(page_title="Secure Name Search", layout="centered")
-
+# ----- USER CREDENTIALS -----
 usernames = ["user1", "user2", "user3", "user4"]
 names = ["User One", "User Two", "User Three", "User Four"]
-hashed_passwords = stauth.Hasher(["test123"]*4).generate()
 
+# HASH PASSWORDS (new API)
+passwords = ["test123"] * 4
+hashed_passwords = stauth.Hasher().hash(passwords)
+
+# CREDENTIAL DICTIONARY (new API)
+credentials = {
+    "usernames": {
+        usernames[i]: {
+            "name": names[i],
+            "password": hashed_passwords[i]
+        }
+        for i in range(len(usernames))
+    }
+}
+
+# AUTHENTICATOR OBJECT (new API)
 authenticator = stauth.Authenticate(
-    names,
-    usernames,
-    hashed_passwords,
+    credentials,
     "demo_cookie",
     "demo_key",
     cookie_expiry_days=1
 )
 
+# ----- LOGIN -----
 name, auth_status, username = authenticator.login("Login", "main")
 
 if auth_status is False:
@@ -24,12 +39,14 @@ if auth_status is False:
 elif auth_status is None:
     st.warning("Please enter your username and password")
 
+# ----- APPLICATION AFTER LOGIN -----
 if auth_status:
     authenticator.logout("Logout", "sidebar")
     st.sidebar.write(f"Logged in as: {name}")
 
     st.title("🔍 Secure Name Search App")
 
+    # Load Excel File
     df = pd.read_excel("sample_data.xlsx")
 
     search_name = st.text_input("Enter name to search:")
