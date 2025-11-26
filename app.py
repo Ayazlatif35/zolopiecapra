@@ -2,9 +2,11 @@ import streamlit as st
 import pandas as pd
 import streamlit_authenticator as stauth
 
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(page_title="Secure Name Search", layout="centered")
 
 # ---------------- CREDENTIALS ----------------
+# Very old v0.2.x requires a credentials dictionary
 credentials = {
     "usernames": {
         "user1": {"name": "User One", "password": "test123"},
@@ -15,10 +17,12 @@ credentials = {
 }
 
 # ---------------- AUTHENTICATOR ----------------
+# Old constructor: credentials dict, cookie name, key
 authenticator = stauth.Authenticate(credentials, "demo_cookie", "demo_key")
 
 # ---------------- LOGIN ----------------
-name, auth_status, username = authenticator.login("Login", "sidebar")  # <-- fixed
+# Use 'sidebar' instead of 'main' (allowed values: 'sidebar', 'unrendered')
+name, auth_status, username = authenticator.login("Login", "sidebar")
 
 if auth_status is False:
     st.error("Incorrect username or password")
@@ -32,11 +36,13 @@ if auth_status:
 
     st.title("🔍 Secure Name Search App")
 
-    df = pd.read_excel("sample_data.xlsx")
+    # Load Excel data
+    df = pd.read_excel("sample_data.xlsx")  # Make sure this file exists
 
     search_name = st.text_input("Enter name to search:")
 
     if st.button("Search"):
+        # Case-insensitive search in column 'A'
         results = df[df["A"].astype(str).str.contains(search_name, case=False, na=False)]
         if results.empty:
             st.error("No matching records found.")
